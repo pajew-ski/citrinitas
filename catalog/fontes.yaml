@@ -1,0 +1,101 @@
+# Fontes: the catalogue of sources (Spec C2, C3, C6, C12, C18, C23, C42).
+# status active  = an adapter exists and runs. status planned = on the roadmap, shown in the coverage matrix as planned.
+# reliability    = Admiralty scale A to F for the source itself, with reason and date. It is never combined with
+#                  the credibility of a single fact (Spec C23).
+# license        = an id from citrinitas/athanor/licenses.py; `restricted` until the terms are verified.
+fontes:
+  fama:
+    name: GDELT 2.0 Events, Mentions and Global Knowledge Graph
+    homepage: https://www.gdeltproject.org/
+    license: GDELT-terms
+    access: open
+    cadence: 15 minutes
+    reliability: C
+    reliability_reason: Machine-coded from news text in 65 languages; complete as a record of what is reported, noisy as a record of what happened (2026-11-18).
+    quaestiones: [q-force-reporting, q-language-gap]
+    budget: {disk_gb: 48, runtime_s_day: 7200, download_mb_day: 3000}
+    cells:
+      - {domain: security, classis: reported, levels: [world, country, region, place], times: [live]}
+      - {domain: politics, classis: reported, levels: [world, country, region, place], times: [live]}
+      - {domain: information, classis: reported, levels: [world, country], times: [live]}
+  kev:
+    name: CISA Known Exploited Vulnerabilities Catalog
+    homepage: https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+    license: CC0-1.0
+    access: open
+    cadence: daily
+    reliability: B
+    reliability_reason: Official catalogue; an entry requires evidence of exploitation; additions can lag the first exploitation (2026-11-18).
+    quaestiones: [q-exploited-vulnerabilities]
+    budget: {disk_gb: 1, runtime_s_day: 600, download_mb_day: 200}
+    cells:
+      - {domain: network, classis: official, levels: [world], times: [live, historic]}
+
+  # ---- planned: access and licence are verified when the adapter is built ----
+  ucdp:
+    {status: planned, name: UCDP Georeferenced Event Dataset and Candidate Events, homepage: "https://ucdp.uu.se/", license: restricted, access: key,
+     cells: [{domain: security, classis: measured, levels: [world, country, region, place], times: [live, historic]}]}
+  hapi:
+    {status: planned, name: HDX Humanitarian API, homepage: "https://hapi.humdata.org/", license: restricted, access: key,
+     cells: [{domain: security, classis: measured, levels: [country, region], times: [historic]},
+             {domain: food, classis: official, levels: [country, region], times: [live, future]},
+             {domain: population, classis: official, levels: [country, region], times: [live, historic]}]}
+  views:
+    {status: planned, name: VIEWS conflict forecasts, homepage: "https://viewsforecasting.org/", license: restricted, access: open,
+     cells: [{domain: security, classis: expected, levels: [country, place], times: [future]}]}
+  portwatch:
+    {status: planned, name: IMF PortWatch chokepoint and port transits, homepage: "https://portwatch.imf.org/", license: restricted, access: open,
+     cells: [{domain: economy, classis: measured, levels: [world, place], times: [live, historic]},
+             {domain: mobility, classis: measured, levels: [place], times: [live, historic]}]}
+  comtrade:
+    {status: planned, name: UN Comtrade, homepage: "https://comtradeplus.un.org/", license: restricted, access: key,
+     cells: [{domain: economy, classis: official, levels: [country], times: [historic]}]}
+  firms:
+    {status: planned, name: NASA FIRMS active fires, homepage: "https://firms.modaps.eosdis.nasa.gov/", license: US-PD, access: key,
+     cells: [{domain: climate, classis: measured, levels: [country, place], times: [live, historic]}]}
+  energy_charts:
+    {status: planned, name: Energy-Charts (Fraunhofer ISE), homepage: "https://www.energy-charts.info/", license: CC-BY-4.0, access: open,
+     cells: [{domain: energy, classis: measured, levels: [country], times: [live, historic]}]}
+  entsoe:
+    {status: planned, name: ENTSO-E Transparency Platform, homepage: "https://transparency.entsoe.eu/", license: restricted, access: key,
+     cells: [{domain: energy, classis: measured, levels: [country], times: [live, historic]}]}
+  gie:
+    {status: planned, name: GIE AGSI and ALSI gas storage and LNG, homepage: "https://agsi.gie.eu/", license: restricted, access: key,
+     cells: [{domain: energy, classis: measured, levels: [country, place], times: [live, historic]}]}
+  dip:
+    {status: planned, name: German Bundestag DIP, homepage: "https://dip.bundestag.de/", license: restricted, access: key,
+     cells: [{domain: politics, classis: official, levels: [country], times: [live, historic]}]}
+  eurlex:
+    {status: planned, name: EUR-Lex and the Official Journal of the EU, homepage: "https://eur-lex.europa.eu/", license: restricted, access: open,
+     cells: [{domain: politics, classis: official, levels: [world, country], times: [live, historic]}]}
+  federal_register:
+    {status: planned, name: US Federal Register, homepage: "https://www.federalregister.gov/", license: US-PD, access: open,
+     cells: [{domain: politics, classis: official, levels: [country], times: [live, historic]}]}
+  dawum:
+    {status: planned, name: DAWUM election polls, homepage: "https://dawum.de/", license: ODbL-1.0, access: open,
+     cells: [{domain: society, classis: expected, levels: [country, region], times: [live, future]}]}
+  wikidata:
+    {status: planned, name: Wikidata (organisations and public offices), homepage: "https://www.wikidata.org/", license: CC0-1.0, access: open,
+     cells: [{domain: politics, classis: official, levels: [world, country], times: [live]}]}
+  gleif:
+    {status: planned, name: GLEIF legal entities and ownership, homepage: "https://www.gleif.org/", license: CC0-1.0, access: open,
+     cells: [{domain: economy, classis: official, levels: [world, country], times: [live]}]}
+  opensanctions:
+    {status: planned, name: OpenSanctions, homepage: "https://www.opensanctions.org/", license: CC-BY-NC-4.0, access: open,
+     cells: [{domain: politics, classis: official, levels: [world, country], times: [live]}]}
+  copernicus:
+    {status: planned, name: Copernicus Data Space (Sentinel), homepage: "https://dataspace.copernicus.eu/", license: restricted, access: account,
+     cells: [{domain: space, classis: measured, levels: [place], times: [live, historic]}]}
+  open_meteo:
+    {status: planned, name: "Open-Meteo archive, seasonal forecast and climate projections", homepage: "https://open-meteo.com/", license: restricted, access: open,
+     cells: [{domain: climate, classis: measured, levels: [place], times: [live, historic]},
+             {domain: climate, classis: expected, levels: [place], times: [future]}]}
+  openalex:
+    {status: planned, name: OpenAlex, homepage: "https://openalex.org/", license: CC0-1.0, access: key,
+     cells: [{domain: science, classis: official, levels: [world, country], times: [live, historic]}]}
+  bluesky:
+    {status: planned, name: "Bluesky Jetstream (counts by term, place and time; never by account)", homepage: "https://docs.bsky.app/", license: restricted, access: open,
+     cells: [{domain: information, classis: reported, levels: [world], times: [live]}]}
+  gfg:
+    {status: planned, name: GDELT Global Frontpage Graph, homepage: "https://www.gdeltproject.org/", license: GDELT-terms, access: open,
+     cells: [{domain: information, classis: reported, levels: [world, country], times: [live]}]}

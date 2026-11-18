@@ -1,0 +1,27 @@
+[Unit]
+Description=Citrinitas daily upkeep: compaction, drift, budget, indicators, coverage, probe (no network)
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/flock /srv/citrinitas/state/lake.lock /srv/citrinitas/current/.venv/bin/python -m citrinitas daily
+TimeoutStartSec=3600
+ReadWritePaths=/srv/citrinitas/state /srv/citrinitas/data
+PrivateNetwork=yes
+RestrictAddressFamilies=AF_UNIX
+MemoryMax=3G
+User=citrinitas
+Group=citrinitas
+WorkingDirectory=/srv/citrinitas/current
+Environment=CITRINITAS_HOME=/srv/citrinitas PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+LockPersonality=yes
+SystemCallArchitectures=native

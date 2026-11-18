@@ -1,0 +1,31 @@
+[Unit]
+Description=Citrinitas Fontes: fetch raw files into the spool (network, no parsing)
+After=network-online.target
+Wants=network-online.target
+OnSuccess=citrinitas-parse.service
+# A source that failed must not keep the files of the others in the spool (Spec C10).
+OnFailure=citrinitas-parse.service
+
+[Service]
+Type=oneshot
+ExecStart=/srv/citrinitas/current/.venv/bin/python -m citrinitas fetch
+TimeoutStartSec=900
+ReadWritePaths=/srv/citrinitas/spool /srv/citrinitas/state /srv/citrinitas/data
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+MemoryMax=1G
+User=citrinitas
+Group=citrinitas
+WorkingDirectory=/srv/citrinitas/current
+Environment=CITRINITAS_HOME=/srv/citrinitas PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+LockPersonality=yes
+SystemCallArchitectures=native
