@@ -1,0 +1,21 @@
+[project]
+name = "citrinitas"
+version = "0.1.0"
+description = "An open intelligence base: open sources in one model, cut by place, time and domain."
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.11"
+dependencies = ["duckdb>=2.0", "h3>=4.1", "numpy>=2", "PyYAML>=6"]
+
+[project.scripts]
+citrinitas = "citrinitas.__main__:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["citrinitas*"]
+
+[tool.ruff]
+line-length = 120

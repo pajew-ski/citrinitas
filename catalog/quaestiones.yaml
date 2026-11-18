@@ -1,0 +1,75 @@
+# Quaestiones: the questions that steer collection (Spec C18, C19, C22).
+# Every active source refers to at least one question. Every indicator states its query, its threshold and
+# its base rate before it is watched. Private questions go to etc/quaestiones.d/*.yaml on the node, not here.
+quaestiones:
+  q-force-reporting:
+    text: Where is media reporting on the use of force rising against its own baseline?
+    domains: [security]
+    level: country
+    time: live
+    due: 2027-02-28
+    status: open
+    indicators:
+      - id: force-share-24h
+        note: Share of all reported events in the last 24 hours that are assault, fight or mass violence (CAMEO 18 to 20), weighted by articles.
+        sql: >
+          SELECT sum(n_articles) FILTER (root_code IN ('18', '19', '20')) / sum(n_articles)
+          FROM fama_hourly_events
+          WHERE dt >= current_date - 2 AND hour >= CAST(now() AS TIMESTAMP) - INTERVAL 1 DAY
+        threshold: 0.12
+        threshold_basis: provisional; to be set from the upper quartile once 28 days of data exist
+        direction: above
+        base_rate:
+          sql: >
+            SELECT median(s) FROM (
+              SELECT CAST(hour AS DATE) AS d,
+                     sum(n_articles) FILTER (root_code IN ('18', '19', '20')) / sum(n_articles) AS s
+              FROM fama_hourly_events WHERE dt >= current_date - 29 AND dt < current_date GROUP BY 1)
+  q-language-gap:
+    text: Which countries does the world's press cover while the German-language press is silent?
+    domains: [information]
+    level: country
+    time: live
+    due: 2027-02-28
+    status: open
+    indicators:
+      - id: absent-in-german-24h
+        note: Countries with at least 50 documents in other languages in the last 24 hours and none in German.
+        sql: >
+          SELECT count(*) FROM (
+            SELECT iso3, sum(n_docs) FILTER (lang <> 'deu') AS elsewhere,
+                   coalesce(sum(n_docs) FILTER (lang = 'deu'), 0) AS german
+            FROM fama_hourly_geo
+            WHERE dt >= current_date - 2 AND hour >= CAST(now() AS TIMESTAMP) - INTERVAL 1 DAY AND iso3 IS NOT NULL
+            GROUP BY 1) WHERE elsewhere >= 50 AND german = 0
+        threshold: 40
+        threshold_basis: provisional; to be set from the upper quartile once 28 days of data exist
+        direction: above
+        base_rate:
+          sql: >
+            SELECT median(n) FROM (
+              SELECT d, count(*) AS n FROM (
+                SELECT CAST(hour AS DATE) AS d, iso3, sum(n_docs) FILTER (lang <> 'deu') AS elsewhere,
+                       coalesce(sum(n_docs) FILTER (lang = 'deu'), 0) AS german
+                FROM fama_hourly_geo WHERE dt >= current_date - 29 AND dt < current_date AND iso3 IS NOT NULL
+                GROUP BY 1, 2) WHERE elsewhere >= 50 AND german = 0 GROUP BY 1)
+  q-exploited-vulnerabilities:
+    text: Which software vulnerabilities newly entered active exploitation?
+    domains: [network]
+    level: world
+    time: live
+    due: 2027-02-28
+    status: open
+    indicators:
+      - id: kev-added-7d
+        note: Entries added to the CISA catalogue in the last seven days.
+        sql: >
+          SELECT count(*) FROM facta
+          WHERE fons = 'kev' AND t_from >= CAST(now() AS TIMESTAMP) - INTERVAL 7 DAY
+        threshold: 15
+        threshold_basis: about twice the long-run weekly mean of the catalogue
+        direction: above
+        base_rate:
+          sql: >
+            SELECT count(*) * 7.0 / greatest(date_diff('day', min(t_from), max(t_from)), 1)
+            FROM facta WHERE fons = 'kev'

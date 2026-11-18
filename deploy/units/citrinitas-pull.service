@@ -1,0 +1,9 @@
+[Unit]
+Description=Citrinitas: fetch the branch and install it if its self-test passes
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/citrinitas-pull
+TimeoutStartSec=1200

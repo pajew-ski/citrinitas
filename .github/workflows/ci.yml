@@ -1,0 +1,22 @@
+name: ci
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+      - run: pip install --require-hashes -r requirements.lock
+      - run: python scripts/spec_check.py
+      - run: python -m citrinitas selftest
+      - run: bash -n deploy/pve-create.sh && bash -n deploy/bootstrap.sh && bash -n deploy/install.sh && sh -n deploy/pull.sh

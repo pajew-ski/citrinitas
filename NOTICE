@@ -1,0 +1,7 @@
+Citrinitas
+Copyright 2026 the Citrinitas authors
+
+Licensed under the Apache License, Version 2.0.
+
+Test fixtures under tests/fixtures are trimmed excerpts of GDELT 2.0 data (https://www.gdeltproject.org/),
+used under the terms of the GDELT Project. Data sources keep their own licences; see catalog/fontes.yaml.

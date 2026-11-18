@@ -1,0 +1,4 @@
+duckdb==2.0.0
+h3==4.5.0
+numpy==2.5.5   # DuckDB needs it for Python scalar functions (the H3 cell of a coordinate)
+PyYAML==6.0.3
